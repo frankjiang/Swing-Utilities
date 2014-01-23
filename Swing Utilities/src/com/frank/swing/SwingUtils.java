@@ -360,20 +360,48 @@ public class SwingUtils
 	public static File selectSaveFile(Frame parent, String title)
 			throws IOException
 	{
+		return selectSaveFile(null, parent, title);
+	}
+
+	/**
+	 * Select file to save via {@linkplain FileDialog} and create it if not
+	 * exists.
+	 * 
+	 * @param file
+	 *            the default file or the directory of the default file to set
+	 *            the default directory of the {@linkplain FileDialog}
+	 * @param parent
+	 *            the parent of {@linkplain FileDialog}
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @return the selected file if selected and created, null otherwise
+	 * @throws IOException
+	 *             If an I/O error occurred
+	 */
+	public static File selectSaveFile(File file, Frame parent, String title)
+			throws IOException
+	{
 		FileDialog dialog = new FileDialog(parent, title, FileDialog.SAVE);
+		if (file != null && file.exists())
+		{
+			if (file.isDirectory())
+				dialog.setDirectory(file.getAbsolutePath());
+			else
+				dialog.setDirectory(file.getParent());
+		}
 		dialog.setVisible(true);
 		String filename = dialog.getFile();
 		if (filename == null || filename.equals(" "))//$NON-NLS-1$
 			return null;
 		String dir = dialog.getDirectory();
 		dialog.dispose();
-		File file = new File(dir, filename);
-		if (!file.exists())
-			if (file.createNewFile())
-				return file;
+		File fileSave = new File(dir, filename);
+		if (!fileSave.exists())
+			if (fileSave.createNewFile())
+				return fileSave;
 			else
 				return null;
-		return file;
+		return fileSave;
 	}
 
 	/**
@@ -423,7 +451,32 @@ public class SwingUtils
 	 */
 	public static File selectLoadFile(Frame parent, String title)
 	{
+		return selectLoadFile(null, parent, title);
+	}
+
+	/**
+	 * Select file to load via {@linkplain FileDialog}.
+	 * 
+	 * @param file
+	 *            the default file or the directory of the default file to set
+	 *            the default directory of the {@linkplain FileDialog}
+	 * @param parent
+	 *            the parent of {@linkplain FileDialog}
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @return the selected file if selected and created, <code>null</code>
+	 *         otherwise
+	 */
+	public static File selectLoadFile(File file, Frame parent, String title)
+	{
 		FileDialog dialog = new FileDialog(parent, title, FileDialog.LOAD);
+		if (file != null && file.exists())
+		{
+			if (file.isDirectory())
+				dialog.setDirectory(file.getAbsolutePath());
+			else
+				dialog.setDirectory(file.getParent());
+		}
 		dialog.setVisible(true);
 		String filename = dialog.getFile();
 		if (filename == null || filename.equals(" "))//$NON-NLS-1$
