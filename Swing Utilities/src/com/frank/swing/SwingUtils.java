@@ -5,6 +5,7 @@
 package com.frank.swing;
 
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.Font;
@@ -357,7 +358,7 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Frame parent, String title)
+	public static File selectSaveFile(Window parent, String title)
 			throws IOException
 	{
 		return selectSaveFile(null, parent, title);
@@ -371,17 +372,29 @@ public class SwingUtils
 	 *            the default file or the directory of the default file to set
 	 *            the default directory of the {@linkplain FileDialog}
 	 * @param parent
-	 *            the parent of {@linkplain FileDialog}
+	 *            The parent of {@linkplain FileDialog}. <br>
+	 *            This type can be {@linkplain Dialog} or {@linkplain Frame},
+	 *            otherwise throw a RuntimeException.
 	 * @param title
 	 *            the title of {@linkplain FileDialog}
 	 * @return the selected file if selected and created, null otherwise
 	 * @throws IOException
 	 *             If an I/O error occurred
+	 * @throws RuntimeException
+	 *             if the parent is not supported
 	 */
-	public static File selectSaveFile(File file, Frame parent, String title)
+	public static File selectSaveFile(File file, Window parent, String title)
 			throws IOException
 	{
-		FileDialog dialog = new FileDialog(parent, title, FileDialog.SAVE);
+		FileDialog dialog = null;
+		if (parent instanceof Dialog)
+			dialog = new FileDialog((Dialog) parent, title, FileDialog.SAVE);
+		else if (parent instanceof Frame)
+			dialog = new FileDialog((Frame) parent, title, FileDialog.SAVE);
+		else
+			throw new RuntimeException(String.format(
+					Messages.getString("SwingUtils.12"), //$NON-NLS-1$
+					parent.getClass()));
 		if (file != null && file.exists())
 		{
 			if (file.isDirectory())
@@ -449,7 +462,7 @@ public class SwingUtils
 	 *            the title of {@linkplain FileDialog}
 	 * @return the selected file if selected and created, null otherwise
 	 */
-	public static File selectLoadFile(Frame parent, String title)
+	public static File selectLoadFile(Window parent, String title)
 	{
 		return selectLoadFile(null, parent, title);
 	}
@@ -461,15 +474,25 @@ public class SwingUtils
 	 *            the default file or the directory of the default file to set
 	 *            the default directory of the {@linkplain FileDialog}
 	 * @param parent
-	 *            the parent of {@linkplain FileDialog}
+	 *            The parent of {@linkplain FileDialog}. <br>
+	 *            This type can be {@linkplain Dialog} or {@linkplain Frame},
+	 *            otherwise use <code>null</code> as default.
 	 * @param title
 	 *            the title of {@linkplain FileDialog}
 	 * @return the selected file if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File selectLoadFile(File file, Frame parent, String title)
+	public static File selectLoadFile(File file, Window parent, String title)
 	{
-		FileDialog dialog = new FileDialog(parent, title, FileDialog.LOAD);
+		FileDialog dialog = null;
+		if (parent instanceof Dialog)
+			dialog = new FileDialog((Dialog) parent, title, FileDialog.LOAD);
+		else if (parent instanceof Frame)
+			dialog = new FileDialog((Frame) parent, title, FileDialog.LOAD);
+		else
+			throw new RuntimeException(String.format(
+					Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+					parent.getClass()));
 		if (file != null && file.exists())
 		{
 			if (file.isDirectory())
