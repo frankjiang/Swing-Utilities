@@ -392,9 +392,17 @@ public class SwingUtils
 		else if (parent instanceof Frame)
 			dialog = new FileDialog((Frame) parent, title, FileDialog.SAVE);
 		else
-			throw new RuntimeException(String.format(
-					Messages.getString("SwingUtils.12"), //$NON-NLS-1$
-					parent.getClass()));
+		{
+			if (parent != null)
+				throw new RuntimeException(String.format(
+						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+						parent.getClass()));
+			else
+			{
+				Frame p = null;
+				dialog = new FileDialog(p, title, FileDialog.SAVE);
+			}
+		}
 		if (file != null && file.exists())
 		{
 			if (file.isDirectory())
@@ -490,9 +498,17 @@ public class SwingUtils
 		else if (parent instanceof Frame)
 			dialog = new FileDialog((Frame) parent, title, FileDialog.LOAD);
 		else
-			throw new RuntimeException(String.format(
-					Messages.getString("SwingUtils.12"),////$NON-NLS-1$
-					parent.getClass()));
+		{
+			if (parent != null)
+				throw new RuntimeException(String.format(
+						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+						parent.getClass()));
+			else
+			{
+				Frame p = null;
+				dialog = new FileDialog(p, title, FileDialog.LOAD);
+			}
+		}
 		if (file != null && file.exists())
 		{
 			if (file.isDirectory())
@@ -667,6 +683,64 @@ public class SwingUtils
 			return null;
 		else
 			return obj.toString();
+	}
+
+	/**
+	 * Show input dialog in item selection mode with specified title, message
+	 * and initial selection.
+	 * 
+	 * @param parent
+	 *            the parent component of the input dialog, set {@code null} if
+	 *            not has one
+	 * @param title
+	 *            the title of the dialog
+	 * @param message
+	 *            the message to display
+	 * @param initial
+	 *            an array of <code>Object</code>s that
+	 *            gives the possible selections
+	 * @param selections
+	 *            the value used to initialize the input
+	 *            field
+	 * @return the selected item, or <code>null</code> if user canceled input.
+	 */
+	public static Object selectDialog(Component parent, String title,
+			String message, Object initial, Object[] selections)
+	{
+		return JOptionPane.showInputDialog(parent, message, title,
+				JOptionPane.INFORMATION_MESSAGE, null, selections, initial);
+	}
+
+	/**
+	 * Show input dialog in item selection mode with specified title, message
+	 * and initial selection.
+	 * 
+	 * @param parent
+	 *            the parent component of the input dialog, set {@code null} if
+	 *            not has one
+	 * @param title
+	 *            the title of the dialog
+	 * @param message
+	 *            the message to display
+	 * @param initial
+	 *            an array of <code>Object</code>s that
+	 *            gives the possible selections
+	 * @param selections
+	 *            the value used to initialize the input
+	 *            field
+	 * @return the index of the selected item, or <code>-1</code> if user
+	 *         canceled input.
+	 */
+	public static int selectIndexDialog(Component parent, String title,
+			String message, Object initial, Object[] selections)
+	{
+		Object obj = JOptionPane.showInputDialog(parent, message, title,
+				JOptionPane.INFORMATION_MESSAGE, null, selections, initial);
+		if (obj != null)
+			for (int i = 0; i < selections.length; i++)
+				if (obj.equals(selections[i]))
+					return i;
+		return -1;
 	}
 
 	/**

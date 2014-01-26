@@ -18,7 +18,7 @@ import javax.swing.JComponent;
  * The internal frame (view) menu manager.
  * <p>
  * The <tt>CompManager</tt> is a internal frame to buttons binder. In this
- * binder, the internal frames are binded to buttons according to their indexes.
+ * binder, the internal frames are binded to buttons according to their indices.
  * The action of button perform is defined by {@link ViewActoin}.
  * </p>
  * 
