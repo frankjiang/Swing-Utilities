@@ -128,7 +128,7 @@ public class PathPanel extends JPanel
 	 */
 	public File getPath()
 	{
-		return new File(textField.getText());
+		return new File(textField.getText()).getAbsoluteFile();
 	}
 
 	/**
