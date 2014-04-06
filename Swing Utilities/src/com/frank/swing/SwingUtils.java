@@ -21,6 +21,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 
 import javax.swing.JComboBox;
@@ -361,7 +362,29 @@ public class SwingUtils
 	public static File selectSaveFile(Window parent, String title)
 			throws IOException
 	{
-		return selectSaveFile(null, parent, title);
+		return selectSaveFile(null, parent, title, null);
+	}
+
+	/**
+	 * Select file to save via {@linkplain FileDialog} and create it if not
+	 * exists.
+	 * 
+	 * @param parent
+	 *            the parent of {@linkplain FileDialog}
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @param filter
+	 *            Sets the filename filter for this file dialog window to the
+	 *            specified filter. Filename filters do not function in Sun's
+	 *            reference implementation for Microsoft Windows.
+	 * @return the selected file if selected and created, null otherwise
+	 * @throws IOException
+	 *             If an I/O error occurred
+	 */
+	public static File selectSaveFile(Window parent, String title,
+			FilenameFilter filter) throws IOException
+	{
+		return selectSaveFile(null, parent, title, filter);
 	}
 
 	/**
@@ -383,8 +406,8 @@ public class SwingUtils
 	 * @throws RuntimeException
 	 *             if the parent is not supported
 	 */
-	public static File selectSaveFile(File file, Window parent, String title)
-			throws IOException
+	public static File selectSaveFile(File file, Window parent, String title,
+			FilenameFilter filter) throws IOException
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -395,7 +418,7 @@ public class SwingUtils
 		{
 			if (parent != null)
 				throw new RuntimeException(String.format(
-						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+						Messages.getString("SwingUtils.12"),//$NON-NLS-1$
 						parent.getClass()));
 			else
 			{
@@ -410,6 +433,8 @@ public class SwingUtils
 			else
 				dialog.setDirectory(file.getParent());
 		}
+		if (filter != null)
+			dialog.setFilenameFilter(filter);
 		dialog.setVisible(true);
 		String filename = dialog.getFile();
 		if (filename == null || filename.equals(" "))//$NON-NLS-1$
@@ -472,7 +497,26 @@ public class SwingUtils
 	 */
 	public static File selectLoadFile(Window parent, String title)
 	{
-		return selectLoadFile(null, parent, title);
+		return selectLoadFile(null, parent, title, null);
+	}
+
+	/**
+	 * Select file to load via {@linkplain FileDialog}.
+	 * 
+	 * @param parent
+	 *            the parent of {@linkplain FileDialog}
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @param filter
+	 *            Sets the filename filter for this file dialog window to the
+	 *            specified filter. Filename filters do not function in Sun's
+	 *            reference implementation for Microsoft Windows.
+	 * @return the selected file if selected and created, null otherwise
+	 */
+	public static File selectLoadFile(Window parent, String title,
+			FilenameFilter filter)
+	{
+		return selectLoadFile(null, parent, title, filter);
 	}
 
 	/**
@@ -487,10 +531,15 @@ public class SwingUtils
 	 *            otherwise use <code>null</code> as default.
 	 * @param title
 	 *            the title of {@linkplain FileDialog}
+	 * @param filter
+	 *            Sets the filename filter for this file dialog window to the
+	 *            specified filter. Filename filters do not function in Sun's
+	 *            reference implementation for Microsoft Windows.
 	 * @return the selected file if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File selectLoadFile(File file, Window parent, String title)
+	public static File selectLoadFile(File file, Window parent, String title,
+			FilenameFilter filter)
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -516,6 +565,8 @@ public class SwingUtils
 			else
 				dialog.setDirectory(file.getParent());
 		}
+		if (filter != null)
+			dialog.setFilenameFilter(filter);
 		dialog.setVisible(true);
 		String filename = dialog.getFile();
 		if (filename == null || filename.equals(" "))//$NON-NLS-1$
@@ -523,6 +574,100 @@ public class SwingUtils
 		String dir = dialog.getDirectory();
 		dialog.dispose();
 		return new File(dir, filename);
+	}
+
+	/**
+	 * Select file to load via {@linkplain FileDialog}.
+	 * 
+	 * @param parent
+	 *            The parent of {@linkplain FileDialog}. <br>
+	 *            This type can be {@linkplain Dialog} or {@linkplain Frame},
+	 *            otherwise use <code>null</code> as default.
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @param filter
+	 *            Sets the filename filter for this file dialog window to the
+	 *            specified filter. Filename filters do not function in Sun's
+	 *            reference implementation for Microsoft Windows.
+	 * @return the selected files if selected and created, <code>null</code>
+	 *         otherwise
+	 */
+	public static File[] selectLoadFiles(Window parent, String title,
+			FilenameFilter filter)
+	{
+		return selectLoadFiles(null, parent, title, filter);
+	}
+
+	/**
+	 * Select file to load via {@linkplain FileDialog}.
+	 * 
+	 * @param parent
+	 *            The parent of {@linkplain FileDialog}. <br>
+	 *            This type can be {@linkplain Dialog} or {@linkplain Frame},
+	 *            otherwise use <code>null</code> as default.
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @return the selected files if selected and created, <code>null</code>
+	 *         otherwise
+	 */
+	public static File[] selectLoadFiles(Window parent, String title)
+	{
+		return selectLoadFiles(null, parent, title, null);
+	}
+
+	/**
+	 * Select file to load via {@linkplain FileDialog}.
+	 * 
+	 * @param file
+	 *            the default file or the directory of the default file to set
+	 *            the default directory of the {@linkplain FileDialog}
+	 * @param parent
+	 *            The parent of {@linkplain FileDialog}. <br>
+	 *            This type can be {@linkplain Dialog} or {@linkplain Frame},
+	 *            otherwise use <code>null</code> as default.
+	 * @param title
+	 *            the title of {@linkplain FileDialog}
+	 * @param filter
+	 *            Sets the filename filter for this file dialog window to the
+	 *            specified filter. Filename filters do not function in Sun's
+	 *            reference implementation for Microsoft Windows.
+	 * @return the selected files if selected and created, <code>null</code>
+	 *         otherwise
+	 */
+	public static File[] selectLoadFiles(File file, Window parent,
+			String title, FilenameFilter filter)
+	{
+		FileDialog dialog = null;
+		if (parent instanceof Dialog)
+			dialog = new FileDialog((Dialog) parent, title, FileDialog.LOAD);
+		else if (parent instanceof Frame)
+			dialog = new FileDialog((Frame) parent, title, FileDialog.LOAD);
+		else
+		{
+			if (parent != null)
+				throw new RuntimeException(String.format(
+						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+						parent.getClass()));
+			else
+			{
+				Frame p = null;
+				dialog = new FileDialog(p, title, FileDialog.LOAD);
+			}
+		}
+		if (filter != null)
+			dialog.setFilenameFilter(filter);
+		dialog.setMultipleMode(true);
+		if (file != null && file.exists())
+		{
+			if (file.isDirectory())
+				dialog.setDirectory(file.getAbsolutePath());
+			else
+				dialog.setDirectory(file.getParent());
+		}
+		dialog.setVisible(true);
+		File[] files = dialog.getFiles();
+		dialog.dispose();
+		return files;
 	}
 
 	/**
