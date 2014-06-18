@@ -32,4 +32,5 @@
     </plugins>
   </build>
   <packaging>jar</packaging>
+  <url>https://github.com/frankjiang/System-Utilities.git</url>
 </project>
