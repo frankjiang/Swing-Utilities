@@ -74,15 +74,16 @@ public class SwingUtils
 			@Override
 			public void keyTyped(KeyEvent e)
 			{
-				try
-				{
-					Integer.valueOf(c.getText() + e.getKeyChar());
-				}
-				catch (NumberFormatException nfe)
-				{
-					e.consume();
-					Toolkit.getDefaultToolkit().beep();
-				}
+				if (e.getKeyChar() != KeyEvent.VK_BACK_SPACE)
+					try
+					{
+						Integer.valueOf(c.getText() + e.getKeyChar());
+					}
+					catch (NumberFormatException nfe)
+					{
+						e.consume();
+						Toolkit.getDefaultToolkit().beep();
+					}
 			}
 		});
 	}
