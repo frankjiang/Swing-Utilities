@@ -67,8 +67,7 @@ public class PathPanel extends JPanel
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 1, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0 };
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		setLayout(gridBagLayout);
 		label = new JLabel(title);
@@ -93,9 +92,8 @@ public class PathPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				File file = useFileDialog ? SwingUtils.selectLoadFile(null,
-						PathPanel.this.title) : SwingUtils.selectLoadFile(
-						PathPanel.this, PathPanel.this.title, null);
+				File file = useFileDialog ? SwingUtils.selectLoadFile(null, PathPanel.this.title) : SwingUtils
+						.selectLoadFile(PathPanel.this, PathPanel.this.title, null);
 				if (file != null)
 				{
 					String path = file.getParentFile().getAbsolutePath();
@@ -167,5 +165,17 @@ public class PathPanel extends JPanel
 	public void setUseFileDialog(boolean b)
 	{
 		useFileDialog = b;
+	}
+
+	/**
+	 * @see javax.swing.JComponent#setEnabled(boolean)
+	 */
+	@Override
+	public void setEnabled(boolean enabled)
+	{
+		label.setEnabled(enabled);
+		textField.setEnabled(enabled);
+		button.setEnabled(enabled);
+		super.setEnabled(enabled);
 	}
 }

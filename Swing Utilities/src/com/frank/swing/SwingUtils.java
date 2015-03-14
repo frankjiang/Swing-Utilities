@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -56,8 +58,7 @@ public class SwingUtils
 	{
 		int screenWidth = window.getToolkit().getScreenSize().width;
 		int screenHeight = window.getToolkit().getScreenSize().height;
-		window.setLocation(screenWidth / 2 - window.getSize().width / 2,
-				screenHeight / 2 - window.getSize().height / 2);
+		window.setLocation(screenWidth / 2 - window.getSize().width / 2, screenHeight / 2 - window.getSize().height / 2);
 	}
 
 	/**
@@ -121,8 +122,7 @@ public class SwingUtils
 	{
 		try
 		{
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//$NON-NLS-1$
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//$NON-NLS-1$
 			SwingUtilities.updateComponentTreeUI(window);
 			window.validate();
 		}
@@ -145,10 +145,9 @@ public class SwingUtils
 		{
 			int screenWidth = window.getToolkit().getScreenSize().width;
 			int screenHeight = window.getToolkit().getScreenSize().height;
-			window.setLocation(screenWidth / 2 - window.getSize().width / 2,
-					screenHeight / 2 - window.getSize().height / 2);
-			UIManager
-					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//$NON-NLS-1$
+			window.setLocation(screenWidth / 2 - window.getSize().width / 2, screenHeight / 2 - window.getSize().height
+					/ 2);
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//$NON-NLS-1$
 			SwingUtilities.updateComponentTreeUI(window);
 			window.validate();
 			window.setVisible(true);
@@ -201,8 +200,7 @@ public class SwingUtils
 	{
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(text, popupMenu);
-		JMenuItem mntmSelectAll = new JMenuItem(
-				Messages.getString("SwingUtils.1")); //$NON-NLS-1$
+		JMenuItem mntmSelectAll = new JMenuItem(Messages.getString("SwingUtils.1")); //$NON-NLS-1$
 		mntmSelectAll.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -260,8 +258,8 @@ public class SwingUtils
 	 *            true then shows the alert dialog when the select item exceed
 	 *            the maximum or minimum
 	 */
-	public static void setLinkedComboBox(final Component parent,
-			final JComboBox max, final JComboBox min, final boolean isAlert)
+	public static void setLinkedComboBox(final Component parent, final JComboBox max, final JComboBox min,
+			final boolean isAlert)
 	{
 		setLinkedComboBox(parent, max, min, 0, isAlert);
 	}
@@ -285,9 +283,8 @@ public class SwingUtils
 	 *            true then shows the alert dialog when the select item exceed
 	 *            the maximum or minimum with bias calculated.
 	 */
-	public static void setLinkedComboBox(final Component parent,
-			final JComboBox max, final JComboBox min, final int bias,
-			final boolean isAlert)
+	public static void setLinkedComboBox(final Component parent, final JComboBox max, final JComboBox min,
+			final int bias, final boolean isAlert)
 	{
 		max.addActionListener(new ActionListener()
 		{
@@ -298,12 +295,9 @@ public class SwingUtils
 				if (maxValue + bias < minValue)
 				{
 					if (isAlert)
-						JOptionPane.showConfirmDialog(
-								parent,
-								Messages.getString("SwingUtils.5"), //$NON-NLS-1$
+						JOptionPane.showConfirmDialog(parent, Messages.getString("SwingUtils.5"), //$NON-NLS-1$
 								Messages.getString("SwingUtils.6"), //$NON-NLS-1$
-								JOptionPane.DEFAULT_OPTION,
-								JOptionPane.ERROR_MESSAGE);
+								JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 					max.setSelectedIndex(minValue - bias);
 					Toolkit.getDefaultToolkit().beep();
 				}
@@ -318,11 +312,9 @@ public class SwingUtils
 				if (maxValue + bias < minValue)
 				{
 					if (isAlert)
-						JOptionPane.showConfirmDialog(
-								parent,
+						JOptionPane.showConfirmDialog(parent,
 								Messages.getString("SwingUtils.7"), Messages.getString("SwingUtils.8"), //$NON-NLS-1$ //$NON-NLS-2$
-								JOptionPane.DEFAULT_OPTION,
-								JOptionPane.ERROR_MESSAGE);
+								JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 					min.setSelectedIndex(maxValue + bias);
 					Toolkit.getDefaultToolkit().beep();
 				}
@@ -360,8 +352,7 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Window parent, String title)
-			throws IOException
+	public static File selectSaveFile(Window parent, String title) throws IOException
 	{
 		return selectSaveFile(null, parent, title, null);
 	}
@@ -382,8 +373,7 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Window parent, String title,
-			FilenameFilter filter) throws IOException
+	public static File selectSaveFile(Window parent, String title, FilenameFilter filter) throws IOException
 	{
 		return selectSaveFile(null, parent, title, filter);
 	}
@@ -407,8 +397,7 @@ public class SwingUtils
 	 * @throws RuntimeException
 	 *             if the parent is not supported
 	 */
-	public static File selectSaveFile(File file, Window parent, String title,
-			FilenameFilter filter) throws IOException
+	public static File selectSaveFile(File file, Window parent, String title, FilenameFilter filter) throws IOException
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -418,8 +407,7 @@ public class SwingUtils
 		else
 		{
 			if (parent != null)
-				throw new RuntimeException(String.format(
-						Messages.getString("SwingUtils.12"),//$NON-NLS-1$
+				throw new RuntimeException(String.format(Messages.getString("SwingUtils.12"),//$NON-NLS-1$
 						parent.getClass()));
 			else
 			{
@@ -466,8 +454,7 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Component parent, String title,
-			FileFilter filter) throws IOException
+	public static File selectSaveFile(Component parent, String title, FileFilter filter) throws IOException
 	{
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -514,8 +501,7 @@ public class SwingUtils
 	 *            reference implementation for Microsoft Windows.
 	 * @return the selected file if selected and created, null otherwise
 	 */
-	public static File selectLoadFile(Window parent, String title,
-			FilenameFilter filter)
+	public static File selectLoadFile(Window parent, String title, FilenameFilter filter)
 	{
 		return selectLoadFile(null, parent, title, filter);
 	}
@@ -539,8 +525,7 @@ public class SwingUtils
 	 * @return the selected file if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File selectLoadFile(File file, Window parent, String title,
-			FilenameFilter filter)
+	public static File selectLoadFile(File file, Window parent, String title, FilenameFilter filter)
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -550,8 +535,7 @@ public class SwingUtils
 		else
 		{
 			if (parent != null)
-				throw new RuntimeException(String.format(
-						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+				throw new RuntimeException(String.format(Messages.getString("SwingUtils.12"),////$NON-NLS-1$
 						parent.getClass()));
 			else
 			{
@@ -593,8 +577,7 @@ public class SwingUtils
 	 * @return the selected files if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File[] selectLoadFiles(Window parent, String title,
-			FilenameFilter filter)
+	public static File[] selectLoadFiles(Window parent, String title, FilenameFilter filter)
 	{
 		return selectLoadFiles(null, parent, title, filter);
 	}
@@ -635,8 +618,7 @@ public class SwingUtils
 	 * @return the selected files if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File[] selectLoadFiles(File file, Window parent,
-			String title, FilenameFilter filter)
+	public static File[] selectLoadFiles(File file, Window parent, String title, FilenameFilter filter)
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -646,8 +628,7 @@ public class SwingUtils
 		else
 		{
 			if (parent != null)
-				throw new RuntimeException(String.format(
-						Messages.getString("SwingUtils.12"),////$NON-NLS-1$
+				throw new RuntimeException(String.format(Messages.getString("SwingUtils.12"),////$NON-NLS-1$
 						parent.getClass()));
 			else
 			{
@@ -684,8 +665,7 @@ public class SwingUtils
 	 *            is not needed
 	 * @return the selected file if selected and created, null otherwise
 	 */
-	public static File selectLoadFile(Component parent, String title,
-			FileFilter filter)
+	public static File selectLoadFile(Component parent, String title, FileFilter filter)
 	{
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -710,8 +690,7 @@ public class SwingUtils
 	 *            is not needed
 	 * @return the selected file if selected and created, null otherwise
 	 */
-	public static File[] selectLoadFiles(Component parent, String title,
-			FileFilter filter)
+	public static File[] selectLoadFiles(Component parent, String title, FileFilter filter)
 	{
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogType(JFileChooser.OPEN_DIALOG);
@@ -748,13 +727,11 @@ public class SwingUtils
 	 * @param isBeep
 	 *            if need beep set {@code true}
 	 */
-	public static void errorMessage(Component parent, String message,
-			boolean isBeep)
+	public static void errorMessage(Component parent, String message, boolean isBeep)
 	{
 		if (isBeep)
 			Toolkit.getDefaultToolkit().beep();
-		JOptionPane.showConfirmDialog(parent, message,
-				Messages.getString("SwingUtils.9"), //$NON-NLS-1$
+		JOptionPane.showConfirmDialog(parent, message, Messages.getString("SwingUtils.9"), //$NON-NLS-1$
 				JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -766,8 +743,7 @@ public class SwingUtils
 	 */
 	public static void noticeMessage(Component parent, String message)
 	{
-		JOptionPane.showConfirmDialog(parent, message,
-				Messages.getString("SwingUtils.10"), //$NON-NLS-1$
+		JOptionPane.showConfirmDialog(parent, message, Messages.getString("SwingUtils.10"), //$NON-NLS-1$
 				JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -780,8 +756,7 @@ public class SwingUtils
 	 */
 	public static boolean confirmMessage(Component parent, String message)
 	{
-		return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent,
-				message,
+		return JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(parent, message,
 				Messages.getString("SwingUtils.11"), JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
 				JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -798,11 +773,9 @@ public class SwingUtils
 	 *            the message to display
 	 * @return the input string, may be an empty string
 	 */
-	public static String inputDialog(Component parent, String title,
-			String message)
+	public static String inputDialog(Component parent, String title, String message)
 	{
-		return JOptionPane.showInputDialog(parent, message, title,
-				JOptionPane.INFORMATION_MESSAGE);
+		return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
@@ -820,11 +793,10 @@ public class SwingUtils
 	 *            the initial input content
 	 * @return the input string, may be an empty string
 	 */
-	public static String inputDialog(Component parent, String title,
-			String message, String initial)
+	public static String inputDialog(Component parent, String title, String message, String initial)
 	{
-		Object obj = JOptionPane.showInputDialog(parent, message, title,
-				JOptionPane.INFORMATION_MESSAGE, null, null, initial);
+		Object obj = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null, null,
+				initial);
 		if (obj == null)
 			return null;
 		else
@@ -850,11 +822,11 @@ public class SwingUtils
 	 *            field
 	 * @return the selected item, or <code>null</code> if user canceled input.
 	 */
-	public static Object selectDialog(Component parent, String title,
-			String message, Object initial, Object[] selections)
+	public static Object selectDialog(Component parent, String title, String message, Object initial,
+			Object[] selections)
 	{
-		return JOptionPane.showInputDialog(parent, message, title,
-				JOptionPane.INFORMATION_MESSAGE, null, selections, initial);
+		return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null, selections,
+				initial);
 	}
 
 	/**
@@ -877,11 +849,11 @@ public class SwingUtils
 	 * @return the index of the selected item, or <code>-1</code> if user
 	 *         canceled input.
 	 */
-	public static int selectIndexDialog(Component parent, String title,
-			String message, Object initial, Object[] selections)
+	public static int selectIndexDialog(Component parent, String title, String message, Object initial,
+			Object[] selections)
 	{
-		Object obj = JOptionPane.showInputDialog(parent, message, title,
-				JOptionPane.INFORMATION_MESSAGE, null, selections, initial);
+		Object obj = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null,
+				selections, initial);
 		if (obj != null)
 			for (int i = 0; i < selections.length; i++)
 				if (obj.equals(selections[i]))
@@ -935,5 +907,36 @@ public class SwingUtils
 	{
 		FontMetrics fm = g.getFontMetrics(f);
 		return new Dimension(fm.stringWidth(s), fm.getHeight());
+	}
+
+	/**
+	 * Set the Dock icon for a Mac application.
+	 * <p>
+	 * This method will not cause an exception even be called in a non&minus;Mac
+	 * application.
+	 * </p>
+	 * 
+	 * @param image
+	 *            the image to set
+	 * @return <code>true</code> if successfully setted, otherwise failed
+	 */
+	public static boolean setDockIconImage(Image image)
+	{
+		try
+		{
+			Class macAppClass = Class.forName("com.apple.eawt.Application");
+			Method mGetApplication = macAppClass.getMethod("getApplication");
+			Object ret = mGetApplication.invoke(null);
+			if (ret != null && macAppClass.isInstance(ret))
+			{
+				Method mSetDockIconImage = macAppClass.getMethod("setDockIconImage", Image.class);
+				mSetDockIconImage.invoke(ret, image);
+			}
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return true;
 	}
 }
