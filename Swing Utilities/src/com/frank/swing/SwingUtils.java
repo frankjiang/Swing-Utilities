@@ -58,7 +58,8 @@ public class SwingUtils
 	{
 		int screenWidth = window.getToolkit().getScreenSize().width;
 		int screenHeight = window.getToolkit().getScreenSize().height;
-		window.setLocation(screenWidth / 2 - window.getSize().width / 2, screenHeight / 2 - window.getSize().height / 2);
+		window.setLocation(screenWidth / 2 - window.getSize().width / 2,
+				screenHeight / 2 - window.getSize().height / 2);
 	}
 
 	/**
@@ -145,8 +146,8 @@ public class SwingUtils
 		{
 			int screenWidth = window.getToolkit().getScreenSize().width;
 			int screenHeight = window.getToolkit().getScreenSize().height;
-			window.setLocation(screenWidth / 2 - window.getSize().width / 2, screenHeight / 2 - window.getSize().height
-					/ 2);
+			window.setLocation(screenWidth / 2 - window.getSize().width / 2,
+					screenHeight / 2 - window.getSize().height / 2);
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");//$NON-NLS-1$
 			SwingUtilities.updateComponentTreeUI(window);
 			window.validate();
@@ -258,8 +259,8 @@ public class SwingUtils
 	 *            true then shows the alert dialog when the select item exceed
 	 *            the maximum or minimum
 	 */
-	public static void setLinkedComboBox(final Component parent, final JComboBox max, final JComboBox min,
-			final boolean isAlert)
+	public static void setLinkedComboBox(final Component parent, final JComboBox max,
+			final JComboBox min, final boolean isAlert)
 	{
 		setLinkedComboBox(parent, max, min, 0, isAlert);
 	}
@@ -283,8 +284,8 @@ public class SwingUtils
 	 *            true then shows the alert dialog when the select item exceed
 	 *            the maximum or minimum with bias calculated.
 	 */
-	public static void setLinkedComboBox(final Component parent, final JComboBox max, final JComboBox min,
-			final int bias, final boolean isAlert)
+	public static void setLinkedComboBox(final Component parent, final JComboBox max,
+			final JComboBox min, final int bias, final boolean isAlert)
 	{
 		max.addActionListener(new ActionListener()
 		{
@@ -312,8 +313,8 @@ public class SwingUtils
 				if (maxValue + bias < minValue)
 				{
 					if (isAlert)
-						JOptionPane.showConfirmDialog(parent,
-								Messages.getString("SwingUtils.7"), Messages.getString("SwingUtils.8"), //$NON-NLS-1$ //$NON-NLS-2$
+						JOptionPane.showConfirmDialog(parent, Messages.getString("SwingUtils.7"), //$NON-NLS-1$
+								Messages.getString("SwingUtils.8"),  //$NON-NLS-1$
 								JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
 					min.setSelectedIndex(maxValue + bias);
 					Toolkit.getDefaultToolkit().beep();
@@ -373,7 +374,8 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Window parent, String title, FilenameFilter filter) throws IOException
+	public static File selectSaveFile(Window parent, String title, FilenameFilter filter)
+			throws IOException
 	{
 		return selectSaveFile(null, parent, title, filter);
 	}
@@ -397,7 +399,8 @@ public class SwingUtils
 	 * @throws RuntimeException
 	 *             if the parent is not supported
 	 */
-	public static File selectSaveFile(File file, Window parent, String title, FilenameFilter filter) throws IOException
+	public static File selectSaveFile(File file, Window parent, String title, FilenameFilter filter)
+			throws IOException
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -454,7 +457,8 @@ public class SwingUtils
 	 * @throws IOException
 	 *             If an I/O error occurred
 	 */
-	public static File selectSaveFile(Component parent, String title, FileFilter filter) throws IOException
+	public static File selectSaveFile(Component parent, String title, FileFilter filter)
+			throws IOException
 	{
 		JFileChooser jfc = new JFileChooser();
 		jfc.setDialogType(JFileChooser.SAVE_DIALOG);
@@ -618,7 +622,8 @@ public class SwingUtils
 	 * @return the selected files if selected and created, <code>null</code>
 	 *         otherwise
 	 */
-	public static File[] selectLoadFiles(File file, Window parent, String title, FilenameFilter filter)
+	public static File[] selectLoadFiles(File file, Window parent, String title,
+			FilenameFilter filter)
 	{
 		FileDialog dialog = null;
 		if (parent instanceof Dialog)
@@ -729,8 +734,32 @@ public class SwingUtils
 	 */
 	public static void errorMessage(Component parent, String message, boolean isBeep)
 	{
+		errorMessage(parent, message, isBeep, 200);
+	}
+
+	/**
+	 * Show error message. Its title will be Chinese or English according to the
+	 * locale.
+	 * 
+	 * @param parent
+	 *            the parent component of message dialog
+	 * @param message
+	 *            the message to display.
+	 * @param isBeep
+	 *            if need beep set {@code true}
+	 * @param limitedMessageLength
+	 *            the maximum length of the message string, -1 if unlimited
+	 */
+	public static void errorMessage(Component parent, String message, boolean isBeep,
+			int limitedMessageLength)
+	{
 		if (isBeep)
 			Toolkit.getDefaultToolkit().beep();
+		if (limitedMessageLength > -1)
+		{
+			if (message.length() > limitedMessageLength)
+				message = message.substring(0, limitedMessageLength) + "...";
+		}
 		JOptionPane.showConfirmDialog(parent, message, Messages.getString("SwingUtils.9"), //$NON-NLS-1$
 				JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 	}
@@ -795,8 +824,8 @@ public class SwingUtils
 	 */
 	public static String inputDialog(Component parent, String title, String message, String initial)
 	{
-		Object obj = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null, null,
-				initial);
+		Object obj = JOptionPane.showInputDialog(parent, message, title,
+				JOptionPane.INFORMATION_MESSAGE, null, null, initial);
 		if (obj == null)
 			return null;
 		else
@@ -822,11 +851,11 @@ public class SwingUtils
 	 *            field
 	 * @return the selected item, or <code>null</code> if user canceled input.
 	 */
-	public static Object selectDialog(Component parent, String title, String message, Object initial,
-			Object[] selections)
+	public static Object selectDialog(Component parent, String title, String message,
+			Object initial, Object[] selections)
 	{
-		return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null, selections,
-				initial);
+		return JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE,
+				null, selections, initial);
 	}
 
 	/**
@@ -849,11 +878,11 @@ public class SwingUtils
 	 * @return the index of the selected item, or <code>-1</code> if user
 	 *         canceled input.
 	 */
-	public static int selectIndexDialog(Component parent, String title, String message, Object initial,
-			Object[] selections)
+	public static int selectIndexDialog(Component parent, String title, String message,
+			Object initial, Object[] selections)
 	{
-		Object obj = JOptionPane.showInputDialog(parent, message, title, JOptionPane.INFORMATION_MESSAGE, null,
-				selections, initial);
+		Object obj = JOptionPane.showInputDialog(parent, message, title,
+				JOptionPane.INFORMATION_MESSAGE, null, selections, initial);
 		if (obj != null)
 			for (int i = 0; i < selections.length; i++)
 				if (obj.equals(selections[i]))
